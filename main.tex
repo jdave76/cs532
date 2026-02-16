@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+
+\title{HW1}
+\author{jdave 76}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Q1 image}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{Q1picture.png}
+  \caption{Q1.}
+  \label{fig:label}
+\end{figure}   
+
+\section*{Q1 questions}
+
+
+SCC: A, B
+
+
+IN: D, M
+
+
+OUT: C, L
+
+
+Tendrils: 
+
+
+E (can reach out), F(reachable from IN/can reach OUT), J(reachable from IN/can reach OUT), O (reachable from IN/can reach OUT)
+
+
+Tubes: 
+
+
+D(connect C to A), G(connects F to C), H(connects D to L)
+
+
+Disconnected: I, K   
+
+
+\section{Q2}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{HW1 question 2a.png}
+  \caption{Q2a.}
+  \label{fig:Q2a}
+\end{figure}  
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{HW1 question 2b.png}
+  \caption{Q2b.}
+  \label{fig:Q2b}
+\end{figure}  
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{HW1 question 2c.png}
+  \caption{Q2c.}
+  \label{fig:Q2c}
+\end{figure}  
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{HW1 question 2d.png}
+  \caption{Q2d.}
+  \label{fig:Q2d}
+\end{figure}  
+
+\section{Q3}
+
+\lstset{
+  language=Python,
+  basicstyle=\footnotesize\ttfamily,
+  frame=lines,
+  caption={Generate 500 Unique URIs},
+  label={lst:code_label},
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  breaklines=true
+}   
+
+\begin{lstlisting}
+from bs4 import BeautifulSoup
+import requests
+from urllib.parse import urljoin
+import random
+
+url = "https://norfolk.gov"  # Replace with target URL
+base_url = url
+
+response = requests.get(url)
+soup = BeautifulSoup(response.content, 'html.parser')
+
+target_unique = 500
+unique_uris = set()
+uri_list = []
+
+# Extract all links
+links = soup.find_all('a', href=True)
+uri_list = []
+
+
+while len(uri_list)<500: 
+    for link in links:  
+        try: 
+            head_response = requests.head(url, allow_redirects=True, timeout=20)
+            content_type = head_response.headers.get('Content-Type', '')
+            content_length = int(head_response.headers.get('Content-Length', 0)) 
+    # Check if it's HTML (case-insensitive)
+            if'text/html' in content_type.lower() and content_length>1000:
+                uri_list.append(link)
+                seed_value = hash(tuple(uri_list))  # Convert list to tuple (hashable) and hash it
+                random.seed(seed_value)
+        except FileNotFoundError:
+            print("File not found.")
+\end{lstlisting}   
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{over 500 Unique URIs.png}
+  \caption{over 500 Unique URIs.}
+  \label{fig:5}
+\end{figure}  
+
+
+
+I had my program randomly select URIs as the new random seed. 
+
+
+\end{document}
